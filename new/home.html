@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/jquery.mobile-1.4.3.min.js"></script>
+	<link rel="stylesheet" href="css/mobiletheme.min.css" />
+	<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="css/jquery.mobile.structure-1.4.3.min.css" />
+	<style>
+div.ex{
+    width: 93%;
+    padding: 10px;
+    border: 5px solid gray;
+}#box1{
+
+    width: 93%;
+    padding: 7px;
+
+	 box-shadow: 1px 1px 1px 2px #c8c7c7;
+    border-radius: 5%;
+	
+}
+#box{
+
+    width: 94%;
+    padding: 10px;
+    border: 5px solid black;
+    margin: 0px;
+	height:100%;
+	overflow-y: scroll;
+}
+</style>
+</head>
+<body onLoad="load()">
+			
+					
+					
+	
+			
+		
+<div data-role="page" data-theme="a" id="home">
+	 <div data-role="header" data-theme="f"  align="center"  style="background: #077adb;" data-position="fixed" style="height:20%;">
+<img src="../images/banner.png" height="10%" width="100%">
+ </div>
+		
+				<div data-role="content" style="background: #050E72;" data-theme="a">
+						
+						<div id="box3" style="width:100%;background-color:black;border: 5px #050E72; height:30px;margin-top:5px;color:white;">
+						<center><span style="color:#50703f;font-size:20px;">UPDATES</span></center>
+					</div>
+					<div id="box" style="margin-top:-8px;">
+					<div id="showupdates" style="font:medium arial,sans-serif;font-family:'Roboto';margin-left:'-15px'">Unable to fetch updates. Please check your internet connection and try again.	</div>
+					</div>
+						<textarea id="content" required></textarea>
+						<input type="text" id="hideTime" readonly/>
+						<input type="submit" id="gtupdates" style="font-size:30px;" value="POST UPDATES">
+						<a href="postimage.php" data-theme="c" data-ajax="false" ><font size="3%">POST PICTURE</font></a>
+						
+</div>
+
+
+</div>
+<script>
+
+  $('#gtupdates').click(function(){
+
+	$.mobile.loading('show');
+	if($("#content").val()==""){
+				
+				$.mobile.loading('hide');
+				}else{
+		$.ajax({
+			url:"functions/save.php",
+			data:{
+				datetime:$('#hideTime').val(),
+				content:$('#content').val()
+			},
+			success:function(i){
+				
+				alert("Success!");
+				location.reload();
+			
+			}
+		});
+		
+		}
+	});
+	function load(){
+
+		var xmlhttp;
+		if(window.XMLHttpRequest){
+			xmlhttp = new XMLHttpRequest();
+		}else{
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.onreadystatechange=function(){
+			if(xmlhttp.readyState==4 && xmlhttp.status==200){
+				document.getElementById("showupdates").innerHTML=xmlhttp.responseText;
+		}}
+	xmlhttp.open("GET","functions/viewthis.php", true);
+		xmlhttp.send();
+	}
+	function showDate(){
+	var now = new Date();
+	var days = new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
+	var months = new Array('January','February','March','April','May','June','July','August','September','October','November','December');
+	var date = ((now.getDate()<10) ? "0" : "")+ now.getDate();
+	function fourdigits(number)
+	{
+		return (number < 1000) ? number + 1900 : number;
+	}
+	
+	tnow=new Date();
+	thour=now.getHours();
+	tmin=now.getMinutes();
+	tsec=now.getSeconds();
+	
+	if (tmin<=9) { tmin="0"+tmin; }
+	if (tsec<=9) { tsec="0"+tsec; }
+	if (thour<10) { thour="0"+thour; }
+	
+	today = days[now.getDay()] + ", " + date + " " + months[now.getMonth()] + ", " + (fourdigits(now.getYear())) + " - " + thour + ":" + tmin +":"+ tsec;
+	document.getElementById("hideTime").value = today;
+}
+setInterval("showDate()", 1000);
+</script>
+</body>
+</html>
